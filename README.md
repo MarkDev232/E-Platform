@@ -1,111 +1,131 @@
 ﻿# E-Platform
-✅ 1. Admin Role
-🎯 Purpose: Superuser who oversees and manages the entire platform.
-🛠️ Dashboard Features:
-User Overview (Number of sellers, customers, banned users)
+# 🏋️‍♂️ FitnessBuddies E-commerce Platform
 
-Total Sales & Revenue
+FitnessBuddies is a multi-role e-commerce application built using **Laravel (PHP)** for the backend and **React (TypeScript) + Inertia.js** for the frontend. It supports three main types of users:
 
-Order Stats (daily/weekly/monthly)
+- **Admin**
+- **Seller**
+- **Customer**
 
-Product Approval Requests
+---
 
-Reported Issues / Disputes
+## 🚦 User Roles and Responsibilities
 
-System Logs / Activity Feed
+### 👑 Admin
 
-🧾 Profile Section:
-Name, email, password
+**Purpose**: Platform owner or staff managing all activity across the system.
 
-Role: Superadmin or Staff
+#### 🧩 Dashboard Features
+- Total users, sales, orders
+- Product and seller approval requests
+- Reported issues/disputes
+- Platform-wide analytics
+- System logs and activity
 
-Login activity
+#### 🔐 Profile Fields
+- Name & email
+- Role type (superadmin, staff)
+- Login history
 
-Permissions (if RBAC is implemented)
+#### 🛠 Permissions
+- View, approve, suspend any user
+- Manage product categories and site content
+- Access full transaction history and system logs
+- Send system-wide announcements
 
-⚙️ Management Capabilities:
-✅ Approve/reject sellers
+---
 
-✅ View & edit any user’s profile
+### 🛍 Seller
 
-✅ Suspend users or products
+**Purpose**: Vendors who sell their fitness-related products on the platform.
 
-✅ Access to analytics dashboards
+#### 🧩 Dashboard Features
+- My Products (create, edit, delete)
+- Orders (pending, shipped, delivered)
+- Sales performance charts
+- Payout balance & history
+- Customer reviews and questions
 
-✅ Manage categories, banners, content pages (like Privacy Policy)
+#### 🔐 Profile Fields
+- Store name, contact info
+- Bank/GCash/PayPal details
+- Store logo/banner
+- Verification status
 
-✅ View all transactions
+#### 🛠 Permissions
+- Manage own products and inventory
+- Track and fulfill orders
+- Receive and respond to customer reviews
+- View earnings and payout reports
 
-✅ 2. Seller Role
-🎯 Purpose: Business owner who manages their products and orders.
-🛠️ Dashboard Features:
-Product List (Add, edit, delete)
+---
 
-Inventory Status
+### 🧑‍🤝‍🧑 Customer
 
-Orders Received (Pending, Shipped, Delivered)
+**Purpose**: Buyers who browse and purchase fitness products.
 
-Earnings & Payouts
+#### 🧩 Dashboard Features
+- Recent and past orders
+- Order tracking
+- Wishlist and favorites
+- Personalized recommendations
+- Cart overview
 
-Sales Reports (Chart)
+#### 🔐 Profile Fields
+- Full name and email
+- Address book
+- Payment methods
+- Profile picture
 
-Customer Reviews
+#### 🛠 Permissions
+- Browse and purchase products
+- Track orders and cancel if applicable
+- Leave product reviews
+- Manage profile and shipping info
 
-🧾 Profile Section:
-Business Name
+---
 
-Contact Info (email, phone, address)
+## 🧱 Tech Stack
 
-Bank/GCash/PayPal for payouts
+| Layer       | Tech                    |
+|-------------|--------------------------|
+| Frontend    | React + TypeScript       |
+| Backend     | Laravel (PHP 9.x)        |
+| Middleware  | Inertia.js               |
+| Styling     | Tailwind CSS             |
+| Database    | MySQL / MariaDB          |
+| Auth        | Laravel Breeze / Sanctum |
 
-Store logo / banner
+---
 
-KYC/Verification status
+## 📁 Suggested Folder Structure
 
-⚙️ Management Capabilities:
-✅ Add/edit/delete products
+### Backend (Laravel)
 
-✅ View order history
+---
 
-✅ Mark orders as shipped
+## 📌 Notes
 
-✅ Reply to product reviews/questions
+- All roles use the same layout system with custom breadcrumbs and Inertia pages.
+- Placeholder patterns are used for consistent UI during loading or empty states.
+- Dashboard components are extendable with real-time data or charts.
+- Admins can see and control everything; sellers are limited to their own data; customers manage only their profile and orders.
 
-✅ View revenue summary and payout status
+---
 
-✅ 3. Customer Role
-🎯 Purpose: End user who browses, buys, and tracks orders.
-🛠️ Dashboard Features:
-Recent Orders
+## 💡 Future Enhancements
 
-Order Tracking
+- Role-based notification system
+- Chat between customer and seller
+- In-app reporting and analytics
+- Mobile app support
 
-Favorite Products / Wishlist
+---
 
-Recommended Items
+## 👤 Author
 
-Cart Status
+Developed by Mark Francis Sauquillo  
+Contact: mark.sauquillo4@email.com
 
-Recent Reviews Given
 
-🧾 Profile Section:
-Full Name, Email
 
-Delivery Addresses
-
-Payment Methods (GCash, Cards, COD)
-
-Profile Picture
-
-Change Password
-
-⚙️ Management Capabilities:
-✅ Browse and purchase products
-
-✅ Track and cancel orders
-
-✅ Leave product reviews
-
-✅ Manage account settings and address book
-
-✅ Contact seller or raise disputes
