@@ -6,19 +6,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductImages;
 
 class ProductController extends Controller
 {
-
-    public function top()
+    public function Top_Products()
     {
         $products = Product::orderBy('sales', 'desc')->take(6)->get()->map(function ($product) {
+            $product->image = ProductImages::where('product_id', $product->id)
+                ->where('is_primary', true)
+                ->first();
+
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => (float) $product->price,
-                'image_url' => $product->image_url,
+                'image_path' => $product->image?->url, // ✅ Using accessor
                 'sales' => $product->sales,
             ];
         });
@@ -27,6 +31,7 @@ class ProductController extends Controller
             'topProducts' => $products,
         ]);
     }
+
 
     /**
      * Display a listing of the resource.

@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterSellerController;
 use App\Http\Controllers\RegisterCustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Seller\SellerDashboardController;
 use App\Http\Controllers\Seller\SellerProductController;
@@ -13,8 +14,11 @@ use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\SellerMiddleware;
 use App\Http\Middleware\CustomerMiddleware;
+use App\Http\Controllers\Seller\OrderController;
+use App\Http\Controllers\Seller\BrandController as SellerBrandController;
+use App\Http\Controllers\Seller\CategoryController;
 
-Route::get('/', [ProductController::class, 'top'])->name('welcome');
+Route::get('/', [ProductController::class, 'Top_Products'])->name('welcome');
 
 Route::get('/UserAgreementPolicy', function () {
     return Inertia::render('auth/UserAgreementPolicy');
@@ -23,10 +27,14 @@ Route::get('/askusertype', function () {
     return Inertia::render('auth/askusertype');
 })->name('askusertype');
 
+
+
+// Admin-Only
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-});
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        route::get('/User', [UserController::class, 'index'])->name('admin.users');
+    });
 });
 
 
@@ -35,22 +43,63 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Admin-only dashboard
-Route::prefix('admin')->controller(DashboardController::class)->middleware(AdminMiddleware::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('admin.dashboard');
-    route::get('/User', [UserController::class, 'index'])->name('admin.users');
-});
+// Seller-only dashboard routes
+Route::prefix('seller')->middleware(SellerMiddleware::class)->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('seller.dashboard');
 
-// Seller-only dashboard
-Route::prefix('seller')->controller(SellerDashboardController::class)->middleware(SellerMiddleware::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('seller.dashboard');
-    // Additional routes for seller can be added here
-    Route::get('/Products', [SellerProductController::class, 'index'])->name('seller.products');
-    Route::get('/Products/create', [SellerProductController::class, 'create'])->name('seller.products.create');
-    Route::post('/Products', [SellerProductController::class, 'store'])->name('seller.products.store');
-    Route::get('/Products/{product}/edit', [SellerProductController::class, 'edit'])->name('seller.products.edit');
-    Route::put('/Products/{product}', [SellerProductController::class, 'update'])->name('seller.products.update');
-    Route::delete('/Products/{product}', [SellerProductController::class, 'destroy'])->name('seller.products.destroy');
+    // Products
+    Route::resource('Products', SellerProductController::class)
+        ->names([
+            'index' => 'seller.products.index',
+            'create' => 'seller.products.create',
+            'store' => 'seller.products.store',
+            'show' => 'seller.products.show',
+            'edit' => 'seller.products.edit',
+            'update' => 'seller.products.update',
+            'destroy' => 'seller.products.destroy'
+        ]);
+
+    // Product Images (additional routes)
+    Route::post('/Products/{product}/images', [SellerProductController::class, 'uploadImage'])
+        ->name('seller.products.uploadImage');
+    Route::get('/seller/Products/{product}/images', [SellerProductController::class, 'getImages'])
+        ->name('seller.products.images');
+    Route::delete('/Products/images/{image}', [SellerProductController::class, 'deleteImage'])
+        ->name('seller.products.deleteImage');
+    Route::delete('/seller/products/delete-multiple', [SellerProductController::class, 'destroyMultiple'])
+        ->name('seller.products.destroy-multiple');
+    // Orders
+    Route::get('/Orders', [OrderController::class, 'index'])->name('seller.orders.index');
+
+    // Brands
+    Route::resource('Brand', SellerBrandController::class)
+        ->names([
+            'index' => 'seller.brand.index',
+            'create' => 'seller.brand.create',
+            'store' => 'seller.brand.store',
+            'edit' => 'seller.brand.edit',
+            'update' => 'seller.brand.update',
+            'destroy' => 'seller.brand.destroy'
+        ]);
+
+    Route::delete('brands/delete-multiple', [SellerBrandController::class, 'destroyMultiple'])
+        ->name('seller.brand.destroy.multiple');
+
+
+    // Categories
+    Route::resource('Category', CategoryController::class)
+        ->names([
+            'index' => 'seller.category.index',
+            'create' => 'seller.category.create',
+            'store' => 'seller.category.store',
+            'edit' => 'seller.category.edit',
+            'update' => 'seller.category.update',
+            'destroy' => 'seller.category.destroy'
+        ]);
+
+    Route::delete('/seller/Category/delete-all', [CategoryController::class, 'destroyAll'])
+        ->name('seller.category.destroy.all');
 });
 
 // Customer-only dashboard
@@ -58,5 +107,5 @@ Route::prefix('customer')->controller(CustomerDashboardController::class)->middl
     Route::get('/dashboard', 'index')->name('customer.dashboard');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

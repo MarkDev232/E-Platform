@@ -6,11 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +23,24 @@ class User extends Authenticatable
         'password',
         'user_type', // Added user_type to fillable attributes
     ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Automatically set the user_type to 'customer' if not provided
+        static::creating(function ($user) {
+            if (empty($user->user_type)) {
+                $user->id = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
+    }
+    public $incrementing = false;
+    public $keyType = 'string';
+
+
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -46,4 +64,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
 }

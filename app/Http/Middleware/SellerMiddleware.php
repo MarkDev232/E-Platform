@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-
+use Inertia\Inertia;
 class SellerMiddleware
 {
     public function handle(Request $request, Closure $next){
@@ -15,7 +15,7 @@ class SellerMiddleware
         if (Auth::check() && Auth::user()->user_type === 'seller') {
             return $next($request);
         }
-        abort(403, 'Unauthorized');
+return Inertia::render('Errors/403')->toResponse($request)->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
         

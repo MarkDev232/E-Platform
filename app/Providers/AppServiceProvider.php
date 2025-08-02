@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-
+use App\Services\Products\ProductService;
+use App\Services\Category\CategoryService;
+use App\Services\Brands\BrandService;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +15,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ProductService::class, function ($app) {
+            return new ProductService();
+        });
+
+        $this->app->singleton(CategoryService::class, function ($app) {
+            return new CategoryService();
+        });
+
+        $this->app->singleton(BrandService::class, function ($app) {
+        return new BrandService();
+    });
+
     }
 
     /**
@@ -22,9 +35,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Inertia::share([
-        'auth' => fn () => [
-            'user' => Auth::user(),
-        ],
-    ]);
+            'auth' => fn() => [
+                'user' => Auth::user(),
+            ],
+        ]);
     }
 }

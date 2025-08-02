@@ -34,10 +34,7 @@ export default function Welcome() {
                     <div className="mx-auto flex max-w-7xl items-center justify-between">
                         <div className="flex items-center space-x-4">
                             <AppLogo />
-                            <h1 className="text-xl font-semibold tracking-tight">
-    FitnessBuddies
-  </h1>
-                          
+                            
                         </div>
                         <nav className="flex items-center justify-end gap-4">
                             {auth.user ? (

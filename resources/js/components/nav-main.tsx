@@ -12,7 +12,16 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const currentUrl = page.url;
+
+    const getInitiallyOpen = () => {
+        const activeGroup = items.find((item) =>
+            item.children?.some((child) => currentUrl.startsWith(child.href ?? ''))
+        );
+        return activeGroup?.title ?? null;
+    };
+
+    const [openDropdown, setOpenDropdown] = useState<string | null>(getInitiallyOpen);
 
     const toggleDropdown = (title: string) => {
         setOpenDropdown((prev) => (prev === title ? null : title));
@@ -28,7 +37,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                             <>
                                 <SidebarMenuButton
                                     asChild
-                                    isActive={item.children.some((child) => page.url.startsWith(child.href ?? ''))}
+                                    isActive={item.children.some((child) => currentUrl.startsWith(child.href ?? ''))}
                                     onClick={() => toggleDropdown(item.title)}
                                 >
                                     <div className="flex items-center justify-between w-full cursor-pointer">
@@ -36,7 +45,11 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                             {item.icon && <item.icon />}
                                             <span>{item.title}</span>
                                         </div>
-                                        {openDropdown === item.title ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                        {openDropdown === item.title ? (
+                                            <ChevronUp size={16} />
+                                        ) : (
+                                            <ChevronDown size={16} />
+                                        )}
                                     </div>
                                 </SidebarMenuButton>
 
@@ -46,7 +59,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                             <SidebarMenuItem key={child.title}>
                                                 <SidebarMenuButton
                                                     asChild
-                                                    isActive={page.url.startsWith(child.href ?? '')}
+                                                    isActive={currentUrl.startsWith(child.href ?? '')}
                                                     tooltip={{ children: child.title }}
                                                 >
                                                     <Link href={child.href ?? '#'} prefetch>
@@ -61,7 +74,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                         ) : (
                             <SidebarMenuButton
                                 asChild
-                                isActive={page.url.startsWith(item.href ?? '')}
+                                isActive={currentUrl.startsWith(item.href ?? '')}
                                 tooltip={{ children: item.title }}
                             >
                                 <Link href={item.href ?? '#'} prefetch>

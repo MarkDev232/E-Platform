@@ -1,37 +1,38 @@
-
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import type {  NavItem , AppPageProps  } from '@/types';
-import {usePage } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
-import {  LayoutGrid,PackageSearch , SquareUserRound, LayoutList } from 'lucide-react';
+import type { AppPageProps, NavItem } from '@/types';
+import { usePage } from '@inertiajs/react';
+import { LayoutGrid, LayoutList, PackageSearch, SquareEqual, SquareUserRound } from 'lucide-react';
 import AppLogo from './app-logo';
-
-
-
-
-
 
 export function AppSidebar() {
     const { auth } = usePage<AppPageProps>().props;
-const userType = auth?.user?.user_type ?? null;
-const mainNavItems: NavItem[] = [];
+    const userType = auth?.user?.user_type ?? null;
+    const mainNavItems: NavItem[] = [];
 
-if (userType === 'seller') {
-    mainNavItems.push(
-        { title: 'Dashboard', href: '/seller/dashboard', icon: LayoutGrid },
-        { title: 'My Products', href: '/seller/Products', icon: PackageSearch },
-        { title: 'Orders', href: '/orders' , icon: LayoutList }
-    );
-} else if (userType === 'admin') {
-    mainNavItems.push(
-        { title: 'Dashboard', href: 'dashboard', icon: LayoutGrid },
-        { title: 'Manage Users', href: '/admin/User', icon: SquareUserRound }
-    );
-}
-if (!userType) return null; // or loading spinner
+    if (userType === 'seller') {
+        mainNavItems.push(
+            { title: 'Dashboard', href: '/seller/dashboard', icon: LayoutGrid },
+            {
+                title: 'Manage Products',
+                icon: PackageSearch,
+                children: [
+                    { title: 'All Products', href: '/seller/Products', icon: SquareEqual },
+                    { title: 'All Brands', href: '/seller/Brand', icon: SquareEqual },
+                    { title: 'All Category', href: '/seller/Category', icon: SquareEqual },
+                ],
+            },
+            { title: 'Orders', href: '/seller/Orders', icon: LayoutList },
+        );
+    } else if (userType === 'admin') {
+        mainNavItems.push(
+            { title: 'Dashboard', href: 'dashboard', icon: LayoutGrid },
+            { title: 'Manage Users', href: '/admin/User', icon: SquareUserRound },
+        );
+    }
 
+    if (!userType) return null; // or loading spinner
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -39,9 +40,7 @@ if (!userType) return null; // or loading spinner
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
-                                <AppLogo />
-                            </Link>
+                            <AppLogo />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -52,7 +51,6 @@ if (!userType) return null; // or loading spinner
             </SidebarContent>
 
             <SidebarFooter>
-               
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

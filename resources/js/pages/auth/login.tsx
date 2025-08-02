@@ -28,7 +28,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
             <Head title="Log in" />
             <div className="min-h-screen flex items-center justify-center bg-white px-4">
                 <div className="w-full max-w-md space-y-8 text-center">
-                    <div className="flex items-center justify-center mb-6 gap-2">
+                    <div className="flex justify-self-center  mb-6 gap-2 ">
                         <AppLogo /> 
                     </div>
 

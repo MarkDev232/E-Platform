@@ -16,10 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->string('image_url')->nullable();
-            $table->unsignedInteger('stock')->default(0);
-            $table->unsignedInteger('sales')->default(0);
+            $table->decimal('discount_price', 5, 2)->default(0);
+            $table->unsignedInteger('stock_quantity')->default(0);
+            $table->string('sku')->unique();
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->unsignedInteger('sales')->default(0);
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
+            $table->uuid('seller_id')->constrained('users')->onDelete('cascade'); // Assuming products are linked to sellers
+            $table->enum('status', ['active', 'inactive', 'archived'])->default('active'); //
             $table->timestamps();
         });
     }

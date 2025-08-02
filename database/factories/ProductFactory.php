@@ -1,30 +1,26 @@
 <?php
-
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Category;
+use App\Models\User;
+use App\Models\Brand;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
- */
 class ProductFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-         return [
-            'name' => fake()->words(2, true),
-            'description' => fake()->sentence(),
-            'price' => fake()->randomFloat(2, 10, 1000),
-            'stock' => fake()->numberBetween(10, 100),
-            'sales' => fake()->numberBetween(0, 50),
-            'image_url' => fake()->imageUrl(),
-            'category_id' => Category::inRandomOrder()->first()->id ?? Category::factory(),
+        return [
+            'name' => $this->faker->words(2, true),
+            'description' => $this->faker->sentence(),
+            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'stock_quantity' => $this->faker->numberBetween(10, 100),
+            'sales' => $this->faker->numberBetween(0, 50),
+            'sku' => $this->faker->unique()->bothify('SKU-####'),
+            'category_id' => Category::inRandomOrder()->value('id') ?? Category::factory()->create()->id,
+            'brand_id' => Brand::inRandomOrder()->value('id') ?? Brand::factory()->create()->id,
+            'seller_id' => User::where('user_type', 'seller')->inRandomOrder()->value('id') ?? User::factory()->create(['user_type' => 'seller'])->id,
+            'status' => 'active',
         ];
     }
 }
