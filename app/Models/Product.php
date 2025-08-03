@@ -9,7 +9,7 @@ use App\Models\ProductImages;
 
 class Product extends Model
 {
-    use HasUuids; // Use HasUuids trait for UUID support
+    
     use HasFactory;
     public ?ProductImages $image = null;
     protected $fillable = [
