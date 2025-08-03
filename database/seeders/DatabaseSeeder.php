@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Category;
@@ -54,18 +55,41 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Seed categories
+        // Seed categories with UUIDs
         Category::insert([
-            ['name' => 'Fitness Equipment', 'description' => 'Machines and gear for home or gym'],
-            ['name' => 'Workout Apparel', 'description' => 'Comfortable, sweat-wicking clothing'],
-            ['name' => 'Supplements & Nutrition', 'description' => 'Fuel your performance'],
-            ['name' => 'Gym Accessories', 'description' => 'Gloves, belts, bottles, and more'],
-            ['name' => 'Yoga & Recovery', 'description' => 'Mats, rollers, recovery gear'],
+            [
+                'id' => Str::uuid(),
+                'name' => 'Fitness Equipment',
+                'description' => 'Machines and gear for home or gym'
+            ],
+            [
+                'id' => Str::uuid(),
+                'name' => 'Workout Apparel',
+                'description' => 'Comfortable, sweat-wicking clothing'
+            ],
+            [
+                'id' => Str::uuid(),
+                'name' => 'Supplements & Nutrition',
+                'description' => 'Fuel your performance'
+            ],
+            [
+                'id' => Str::uuid(),
+                'name' => 'Gym Accessories',
+                'description' => 'Gloves, belts, bottles, and more'
+            ],
+            [
+                'id' => Str::uuid(),
+                'name' => 'Yoga & Recovery',
+                'description' => 'Mats, rollers, recovery gear'
+            ],
         ]);
 
-        // Create dummy products using factories
-        Product::factory()->count(10)->create();
-
-        // Create dummy product images
-        ProductImages::factory()->count(20)->create();
+        Product::factory()
+            ->count(10)
+            ->has(
+                ProductImages::factory()->count(2),
+                'images' // Explicitly specify the relationship name
+            )
+            ->create();
     }
 }

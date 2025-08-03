@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-use App\Models\ProductImages;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
-    
     use HasFactory;
-    public ?ProductImages $image = null;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'product_id';
+
     protected $fillable = [
+        'product_id',
         'name',
         'description',
         'price',
@@ -21,8 +24,19 @@ class Product extends Model
         'sku',
         'category_id',
         'sales',
-        'seller_id'
+        'brand_id',
+        'seller_id',
+        'status'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->product_id = $model->product_id ?? Str::uuid();
+        });
+    }
 
     public function category()
     {
@@ -31,7 +45,7 @@ class Product extends Model
 
     public function images()
     {
-        return $this->hasMany(ProductImages::class);
+        return $this->hasMany(ProductImages::class, 'product_id', 'product_id');
     }
     public function image()
     {

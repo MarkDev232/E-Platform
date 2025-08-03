@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('brands', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // bigint unsigned
             $table->string('name')->unique();
             $table->string('logo')->nullable();
             $table->text('description')->nullable();
-            $table->timestamps(); 
+            $table->timestamps();
         });
         Schema::create('categories', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // ✅ Laravel expects 'id' by default
+            $table->uuid('id')->primary();
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->timestamps();

@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventory_logs', function (Blueprint $table) {
-            $table->bigIncrements('id')->primary();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->id();
+            $table->uuid('product_id'); // Matches products.product_id type
+            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
             $table->text('change');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
