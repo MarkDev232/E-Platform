@@ -37,7 +37,7 @@ class SellerProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'images' => 'required|array|min:1',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
             'primary_image' => 'required|integer|min:0'
         ]);
 
@@ -58,10 +58,12 @@ class SellerProductController extends Controller
     }
 
     public function show($id)
-    {
-        $product = Product::with('images')->findOrFail($id);
-        return Inertia::render('Seller/Products', compact('product'));
-    }
+{
+    $product = Product::with('images')->findOrFail($id);
+    return Inertia::render('Seller/Products', [
+        'product' => $product->append(['image_url', 'discounted_price'])
+    ]);
+}
 
     public function edit($id)
     {
@@ -76,9 +78,9 @@ class SellerProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
-            'sku' => 'required|string|max:255|unique:products,sku,' . $id, // Added sku validation
+            'sku' => 'required|string|max:255|unique:products,sku,' . $id, 
             'images' => 'sometimes|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
             'primary_image' => 'required|integer|min:0',
             'deleted_images' => 'nullable|array'
         ]);
@@ -86,7 +88,7 @@ class SellerProductController extends Controller
         try {
             $product = $this->productService->updateProduct(
                 $id,
-                $request->only(['name', 'description', 'sku', 'price', 'stock_quantity']), // Added sku here
+                $request->only(['name', 'description', 'sku', 'price', 'stock_quantity']),
                 $request->file('images') ?? [],
                 $request->primary_image,
                 $request->deleted_images ?? []
@@ -141,8 +143,9 @@ class SellerProductController extends Controller
         return $images;
     }
     public function getImages($productId)
-{
-    $product = Product::with('images')->findOrFail($productId);
-    return response()->json($product->images);
-}
+    {
+        $product = Product::with('images')->findOrFail($productId);
+        return response()->json($product->images);
+    }
+    
 }

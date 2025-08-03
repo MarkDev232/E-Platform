@@ -152,9 +152,9 @@ console.log('Brands data:', brands);
                             <th className="w-10 px-4 py-2">
                                 <Checkbox checked={selectAll} onCheckedChange={toggleSelectAll} />
                             </th>
-                            <th className="px-4 py-2">Name</th>
-                            <th className="max-w-[120px] px-4 py-2">Logo</th>
-                            <th className="px-4 py-2">Description</th>
+                            <th className="px-4 py-2 text-left">Name</th>
+                            {/* <th className="max-w-[120px] px-4 py-2">Logo</th> */}
+                            <th className="px-4 py-2 text-center">Description</th>
                             <th className="px-4 py-2 text-right">Actions</th>
                         </tr>
                     </thead>
@@ -169,10 +169,10 @@ console.log('Brands data:', brands);
                                         />
                                     </td>
                                     <td className="px-4 py-2">{brand.name}</td>
-                                    <td className="x-4 py-2">
+                                    {/* <td className="x-4 py-2">
                                         {brand.logo && <img src={`/storage/${brand.logo}`} alt={brand.name} className="h-10 object-contain" />}
-                                    </td>
-                                    <td className="px-4 py-2">{brand.description}</td>
+                                    </td> */}
+                                    <td className="px-4 py-2 text-center">{brand.description}</td>
                                     <td className="flex justify-end space-x-2 px-4 py-2">
                                         <Button size="sm" variant="outline" onClick={() => openViewModal(brand)}>
                                             <EyeIcon className="h-4 w-4" />

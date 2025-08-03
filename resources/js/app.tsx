@@ -1,7 +1,7 @@
 import '../css/app.css';
 
-import axios from 'axios'; // 👈 Add this
 import { createInertiaApp } from '@inertiajs/react';
+import axios from 'axios'; // 👈 Add this
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
@@ -11,13 +11,14 @@ axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 if (token) {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = token; // From meta tag
+    axios.defaults.withCredentials = true; // 👈 Add this for cookie-based auth
 }
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => title ? `${title} - ${appName}` : appName,
+    title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);

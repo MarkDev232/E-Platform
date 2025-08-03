@@ -137,8 +137,8 @@ export default function Products({ products, filters }: { products: PaginatedPro
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Seller Products" />
-            <div className="flex items-center justify-end py-2 px-5">
-                <form onSubmit={handleSearch} className="flex flex-row justify-between gap-2 rounded-xl p-2">
+            <div className="flex items-center justify-between px-5 py-3">
+                <form onSubmit={handleSearch} className="flex items-center gap-2">
                     <input
                         type="text"
                         value={data.search}
@@ -172,9 +172,9 @@ export default function Products({ products, filters }: { products: PaginatedPro
                 </div>
             </div>
 
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl px-5">
-                <div className="overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <table className="min-w-full text-left text-sm">
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl ">
+                <div className="mx-5 rounded-xl border p-5">
+                    <table className="min-w-full text-left text-sm ">
                         <thead className="bg-muted text-muted-foreground">
                             <tr>
                                 <th className="px-4 py-2">
@@ -183,7 +183,7 @@ export default function Products({ products, filters }: { products: PaginatedPro
                                         onCheckedChange={handleSelectAll}
                                     />
                                 </th>
-                                <th className="px-4 py-2">Name</th>
+                                <th className="px-4 py-2 text-left">Name</th>
                                 <th className="px-4 py-2 text-center">Price</th>
                                 <th className="px-4 py-2 text-center">Stock</th>
                                 <th className="px-4 py-2 text-center">Sales</th>
@@ -200,7 +200,7 @@ export default function Products({ products, filters }: { products: PaginatedPro
                                                 onCheckedChange={() => handleSelectProduct(product.id)}
                                             />
                                         </td>
-                                        <td className="px-4 py-2">{product.name}</td>
+                                        <td className="px-4 py-2 text-left">{product.name}</td>
                                         <td className="px-4 py-2 text-center">₱ {Number(product.price).toFixed(2)}</td>
                                         <td className="px-4 py-2 text-center">{product.stock_quantity}</td>
                                         <td className="px-4 py-2 text-center">{product.sales}</td>

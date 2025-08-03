@@ -11,6 +11,24 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductService
 {
+
+
+
+    public function getTopSellingProducts($limit = 6)
+{
+    return Product::with(['primaryImage'])
+        ->where('status', 'active')
+        ->orderByDesc('sales')
+        ->take($limit)
+        ->get()
+        ->map(function ($product) {
+            $imagePath = $product->primaryImage?->image_path;
+            return [
+                // ... other fields ...
+                'image_url' => $imagePath ? asset('storage/product_images/'.basename($imagePath)) : null,
+            ];
+        });
+}
     public function getAllProducts($request)
     {
         return Product::query()

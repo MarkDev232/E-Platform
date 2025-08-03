@@ -1,23 +1,15 @@
-import {
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
     const currentUrl = page.url;
 
     const getInitiallyOpen = () => {
-        const activeGroup = items.find((item) =>
-            item.children?.some((child) => currentUrl.startsWith(child.href ?? ''))
-        );
+        const activeGroup = items.find((item) => item.children?.some((child) => currentUrl.startsWith(child.href ?? '')));
         return activeGroup?.title ?? null;
     };
 
@@ -40,21 +32,17 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                     isActive={item.children.some((child) => currentUrl.startsWith(child.href ?? ''))}
                                     onClick={() => toggleDropdown(item.title)}
                                 >
-                                    <div className="flex items-center justify-between w-full cursor-pointer">
+                                    <div className="flex w-full cursor-pointer items-center justify-between ">
                                         <div className="flex items-center gap-2">
                                             {item.icon && <item.icon />}
                                             <span>{item.title}</span>
                                         </div>
-                                        {openDropdown === item.title ? (
-                                            <ChevronUp size={16} />
-                                        ) : (
-                                            <ChevronDown size={16} />
-                                        )}
+                                        {openDropdown === item.title ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                                     </div>
                                 </SidebarMenuButton>
 
                                 {openDropdown === item.title && (
-                                    <SidebarMenu className="ml-4 mt-1 space-y-1">
+                                    <SidebarMenu className="mt-1 ml-4 max-w-52 space-y-1 overflow-hidden">
                                         {item.children.map((child) => (
                                             <SidebarMenuItem key={child.title}>
                                                 <SidebarMenuButton
@@ -72,11 +60,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 )}
                             </>
                         ) : (
-                            <SidebarMenuButton
-                                asChild
-                                isActive={currentUrl.startsWith(item.href ?? '')}
-                                tooltip={{ children: item.title }}
-                            >
+                            <SidebarMenuButton asChild isActive={currentUrl.startsWith(item.href ?? '')} tooltip={{ children: item.title }}>
                                 <Link href={item.href ?? '#'} prefetch>
                                     {item.icon && <item.icon />}
                                     <span>{item.title}</span>

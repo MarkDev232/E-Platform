@@ -88,12 +88,6 @@ export default function Category({ categories, filters }: { categories?: Paginat
     const openViewModal = (category: Category) => setModalState({ open: true, category, mode: 'view' });
     const closeModal = () => setModalState((prev) => ({ ...prev, open: false }));
 
-    console.log('Categories data:', {
-        data: categories?.data,
-        current_page: categories?.current_page,
-        last_page: categories?.last_page,
-        
-    });
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manage Categories" />
@@ -140,8 +134,8 @@ export default function Category({ categories, filters }: { categories?: Paginat
                             <th className="w-10 px-4 py-2">
                                 <Checkbox checked={selectAll} onCheckedChange={toggleSelectAll} />
                             </th>
-                            <th className="px-4 py-2">Name</th>
-                            <th className="px-4 py-2">Description</th>
+                            <th className="px-4 py-2 text-left">Name</th>
+                            <th className="px-4 py-2 text-center">Description</th>
                             <th className="px-4 py-2 text-right">Actions</th>
                         </tr>
                     </thead>
@@ -155,8 +149,8 @@ export default function Category({ categories, filters }: { categories?: Paginat
                                             onCheckedChange={() => toggleCategorySelection(category.id)}
                                         />
                                     </td>
-                                    <td className="px-4 py-2">{category.name}</td>
-                                    <td className="px-4 py-2">{category.description}</td>
+                                    <td className="py- px-4 text-left">{category.name}</td>
+                                    <td className="px-4 py-2 text-center">{category.description}</td>
                                     <td className="flex justify-end space-x-2 px-4 py-2">
                                         <Button size="sm" variant="outline" onClick={() => openViewModal(category)}>
                                             <EyeIcon className="h-4 w-4" />
@@ -183,50 +177,52 @@ export default function Category({ categories, filters }: { categories?: Paginat
 
             {/* Pagination */}
             {categories && (
-                <Pagination>
-                    <PaginationContent>
-                        {categories.current_page > 1 && (
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    href={route('seller.category.index', { page: categories.current_page - 1 })}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        router.get(route('seller.category.index', { page: categories.current_page - 1 }));
-                                    }}
-                                />
-                            </PaginationItem>
-                        )}
-
-                        {categories.links
-                            .filter((link) => !isNaN(Number(link.label)))
-                            .map((link, index) => (
-                                <PaginationItem key={index}>
-                                    <PaginationLink
-                                        href={link.url || '#'}
-                                        isActive={link.active}
+              
+                    <Pagination>
+                        <PaginationContent>
+                            {categories.current_page > 1 && (
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        href={route('seller.category.index', { page: categories.current_page - 1 })}
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            if (link.url) router.get(link.url);
+                                            router.get(route('seller.category.index', { page: categories.current_page - 1 }));
                                         }}
-                                    >
-                                        {link.label}
-                                    </PaginationLink>
+                                    />
                                 </PaginationItem>
-                            ))}
+                            )}
 
-                        {categories.current_page < categories.last_page && (
-                            <PaginationItem>
-                                <PaginationNext
-                                    href={route('seller.category.index', { page: categories.current_page + 1 })}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        router.get(route('seller.category.index', { page: categories.current_page + 1 }));
-                                    }}
-                                />
-                            </PaginationItem>
-                        )}
-                    </PaginationContent>
-                </Pagination>
+                            {categories.links
+                                .filter((link) => !isNaN(Number(link.label)))
+                                .map((link, index) => (
+                                    <PaginationItem key={index}>
+                                        <PaginationLink
+                                            href={link.url || '#'}
+                                            isActive={link.active}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                if (link.url) router.get(link.url);
+                                            }}
+                                        >
+                                            {link.label}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                            {categories.current_page < categories.last_page && (
+                                <PaginationItem>
+                                    <PaginationNext
+                                        href={route('seller.category.index', { page: categories.current_page + 1 })}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            router.get(route('seller.category.index', { page: categories.current_page + 1 }));
+                                        }}
+                                    />
+                                </PaginationItem>
+                            )}
+                        </PaginationContent>
+                    </Pagination>
+               
             )}
 
             {/* Category Modal */}

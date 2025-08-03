@@ -7,38 +7,44 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductImages;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     public function Top_Products()
-    {
-        $products = Product::orderBy('sales', 'desc')->take(6)->get()->map(function ($product) {
-            $product->image = ProductImages::where('product_id', $product->id)
-                ->where('is_primary', true)
-                ->first();
-
+{
+    $products = Product::with(['primaryImage'])
+        ->where('status', 'active')
+        ->orderByDesc('sales')
+        ->take(6)
+        ->get()
+        ->map(function ($product) {
+            // Use direct public path instead of Storage facade
+            $imagePath = $product->primaryImage?->image_path;
+            $fullPath = $imagePath ? 'storage/product_images/'.basename($imagePath) : null;
+            
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => (float) $product->price,
-                'image_path' => $product->image?->url, // ✅ Using accessor
+                'discount_price' => (float) $product->discount_price,
+                'image_url' => $fullPath ? asset($fullPath) : null,
                 'sales' => $product->sales,
             ];
         });
 
-        return inertia('welcome', [
-            'topProducts' => $products,
-        ]);
-    }
-
+    return inertia('welcome', [
+        'topProducts' => $products,
+    ]);
+}
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('images')->get();
         return inertia('Seller/Products', [
             'products' => $products,
         ]);
